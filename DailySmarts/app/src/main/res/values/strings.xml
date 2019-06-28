@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Daily Smarts</string>
+    <string name="refresh">Refresh</string>
+    <string name="daily_quote">Daily Quote</string>
+    <string name="my_quotes">My Quotes</string>
+    <string name="like">like</string>
+    <string name="share">share</string>
+    <string name="empty_heart">empty</string>
+    <string name="full_heart">full</string>
+
+
+</resources>
