@@ -104,6 +104,7 @@ public class DailyQuoteFragment extends Fragment {
     private void saveToDatabase() {
         SmartEntity smartEntity = new SmartEntity(text, author);
         db.insertSingleAsync(smartEntity);
+        Toast.makeText(getContext(), "The smarty was saved to your favorite smarties", Toast.LENGTH_SHORT).show();
     }
 
     public interface OnFragmentInteractionListener {
@@ -116,6 +117,7 @@ public class DailyQuoteFragment extends Fragment {
             db.deleteByEntityId(data1 -> {
                 buttonLike.setImageResource(R.drawable.ic_favorite_border_green_48px);
                 buttonLike.setTag(EMPTY);
+                Toast.makeText(getContext(), "The smarty was deleted from your favorite smarties", Toast.LENGTH_SHORT).show();
             }, smartId);
         });
     }

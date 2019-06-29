@@ -35,8 +35,7 @@ public class MyQuotesFragment extends Fragment  {
     public MyQuotesFragment() {
     }
     public static MyQuotesFragment newInstance() {
-        MyQuotesFragment fragment = new MyQuotesFragment();
-        return fragment;
+        return new MyQuotesFragment();
     }
 
     @Override
@@ -79,6 +78,7 @@ public class MyQuotesFragment extends Fragment  {
 
     private void deleteFromDatabase(int id) {
                 db.deleteByEntityId(data -> createRecycleWithDataFromDB(), id);
+        Toast.makeText(getContext(), "The smarty was deleted from your favorite smarties", Toast.LENGTH_SHORT).show();
     }
 
     private void shareSmarty(SmartEntity entity) {
