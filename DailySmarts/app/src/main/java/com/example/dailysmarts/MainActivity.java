@@ -2,8 +2,10 @@ package com.example.dailysmarts;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
+
 import android.content.SharedPreferences;
 import android.net.Uri;
+
 import com.example.dailysmarts.database.DatabaseInstance;
 import com.example.dailysmarts.database.SmartEntity;
 import com.example.dailysmarts.fragments.DailyQuoteFragment;
@@ -12,18 +14,23 @@ import com.example.dailysmarts.retrofit.RetrofitInstance;
 import com.example.dailysmarts.retrofit.SmartModel;
 import com.example.dailysmarts.retrofit.SmartService;
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import com.example.dailysmarts.databinding.ActivityMainBinding;
+
 import java.util.Calendar;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
     private DatabaseInstance db;
     private boolean toUpdateTodaySmarty;
     private int tabPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
 
     private void chooseLanguage() {
         AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setTitle("Welcome to Daily Smarts. Choose your language:");
+        b.setTitle("Welcome to Daily Smarts. Choose your language for the smarties:");
         String[] types = {"English", "Russian"};
         b.setItems(types, (dialog, which) -> {
             dialog.dismiss();
@@ -72,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
     }
 
     private void initRetrofit(String language) {
-        showProgress();
+        showProgressBar();
         RetrofitInstance retrofit = RetrofitInstance.getInstance(language);
         SmartService smartService = retrofit.getSmartService();
         Call<SmartModel> smartCall = smartService.getItem("");
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
         db.getEntityById(data -> {
             if (data != null && data.getDate().startsWith(currentDate)) {
                 showFragment(DailyQuoteFragment.newInstance(data.getQuoteText(), data.getQuoteAuthor()));
-                hideProgress();
+                hideProgressBar();
             } else {
                 initRetrofit(language);
             }
@@ -102,14 +110,14 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
                     if (sharedPreferences.getBoolean("IS_FIRST_TIME", true)) {
                         db.insertSingleAsync(todaysSmarty);
                         showFragment(DailyQuoteFragment.newInstance(result.getQuoteText(), result.getQuoteAuthor()));
-                        hideProgress();
+                        hideProgressBar();
                         sharedPreferences.edit().putBoolean("IS_FIRST_TIME", false).apply();
                     } else {
                         if (toUpdateTodaySmarty) {
                             db.updateTodaySmarty(result.getQuoteText(), result.getQuoteAuthor(), result.getDate());
                             toUpdateTodaySmarty = false;
                             showFragment(DailyQuoteFragment.newInstance(result.getQuoteText(), result.getQuoteAuthor()));
-                            hideProgress();
+                            hideProgressBar();
                         } else {
                             showTodaySmartyFromDB();
                         }
@@ -122,29 +130,36 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
             @Override
             public void onFailure(Call<SmartModel> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "There is no Internet", Toast.LENGTH_SHORT).show();
-                    showTodaySmartyFromDB();
-                hideProgress();
+                showTodaySmartyFromDB();
+                hideProgressBar();
             }
         };
     }
 
     private void showTodaySmartyFromDB() {
         db.getEntityById(data -> {
-            if (data != null ) {
+            if (data != null) {
                 showFragment(DailyQuoteFragment.newInstance(data.getQuoteText(), data.getQuoteAuthor()));
-                hideProgress();
             }
+            hideProgressBar();
         }, 1);
     }
 
     private void initClicks() {
         binding.tabs.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) { switchTabs(tab); }
+            public void onTabSelected(TabLayout.Tab tab) {
+                switchTabs(tab);
+            }
+
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) { }
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
             @Override
-            public void onTabReselected(TabLayout.Tab tab) { switchTabs(tab); }
+            public void onTabReselected(TabLayout.Tab tab) {
+                switchTabs(tab);
+            }
         });
 
         binding.btnRefresh.setOnClickListener(v -> {
@@ -202,9 +217,14 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) { }
+    public void onFragmentInteraction(Uri uri) {
+    }
 
-    public void showProgress() { binding.progress.setVisibility(View.VISIBLE); }
+    public void showProgressBar() {
+        binding.progress.setVisibility(View.VISIBLE);
+    }
 
-    public void hideProgress() { binding.progress.setVisibility(View.GONE); }
+    public void hideProgressBar() {
+        binding.progress.setVisibility(View.GONE);
+    }
 }
