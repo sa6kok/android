@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements DailyQuoteFragmen
                         sharedPreferences.edit().putBoolean("IS_FIRST_TIME", false).apply();
                     } else {
                         if (toUpdateTodaySmarty) {
-                            db.updateTodaySmarty(result.getQuoteText(), result.getQuoteAuthor(), result.getDate());
+                            db.updateTodaySmarty(todaysSmarty.getQuoteText(), todaysSmarty.getQuoteAuthor(), todaysSmarty.getDate());
                             toUpdateTodaySmarty = false;
                             showFragment(DailyQuoteFragment.newInstance(result.getQuoteText(), result.getQuoteAuthor()));
                             hideProgressBar();
