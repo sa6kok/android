@@ -1,1 +1,1 @@
-Final Project SoftUni Android 2019
+Final Project SoftUni Android June 2019
